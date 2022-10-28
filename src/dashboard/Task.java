@@ -5,26 +5,20 @@ import mgr.Manageable;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Task implements Manageable {
-    String name;
+public class Task extends Daily {
     String start_Date;
     String end_Date;
     ArrayList<String> tag = new ArrayList<>();
-    StringBuilder content = new StringBuilder();
-
     @Override
     public void read(Scanner scan) {
-        setName(scan);
+        super.read(scan);//name, content input
         setDate(scan);
+        scan.nextLine();
         while (setTag(scan)) {
         }
-        setContent(scan);
+        scan.nextLine();
+        scan.nextLine();
     }
-
-    private void setName(Scanner scan) {
-        this.name = scan.nextLine();
-    }
-
     private void setDate(Scanner scan) {
         this.start_Date = scan.next();
         if (start_Date.equals("-"))
@@ -45,17 +39,6 @@ public class Task implements Manageable {
             default -> throw new IllegalArgumentException("Unexpected value: " + hashtag.charAt(0));
         };
     }
-
-    private void setContent(Scanner scan) {
-        String rewrite = scan.nextLine();
-        if (rewrite.equals("다시쓰기")) {
-            this.content.delete(0, content.length());
-            this.content.append(scan.next());
-        } else {
-            this.content.append(rewrite);
-        }
-    }
-
     @Override
     public void print() {
         System.out.format("||");
@@ -66,12 +49,6 @@ public class Task implements Manageable {
         System.out.println();
     }
 
-    void printName() {
-        if (name.length() > 10) {
-            System.out.format("*[%s...] | ", name.substring(0, 8));
-        } else
-            System.out.format("*[%s] | ", name);
-    }
 
     void printDate() {
         System.out.format("%s-%s | ", start_Date, end_Date);
@@ -85,14 +62,7 @@ public class Task implements Manageable {
         System.out.format("| ");
     }
 
-    void printContent() {
-        if (content.length() > 15) {
-            System.out.format("%-12s... ", content.substring(0, 13));
-        } else
-            System.out.format("%-15s ", content);
-    }
-
-    int progressLvl() {
+    public int progressLvl() {
         if (start_Date.equals("-"))
             return 1;// waitingList
         if (start_Date.compareTo(Dashboard.today) > 0)
@@ -105,7 +75,8 @@ public class Task implements Manageable {
         }
     }
 
-    void modify(int menuChk, Scanner scan) {
+    @Override
+    public void modify(int menuChk, Scanner scan) {
         scan.nextLine();
         switch (menuChk) {
             case 1 -> setName(scan);
