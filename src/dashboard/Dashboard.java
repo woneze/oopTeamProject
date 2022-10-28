@@ -8,6 +8,7 @@ import java.util.Scanner;
 
 public class Dashboard {
     public static String today;
+    Scanner fileIn;
     Scanner scan;
     String name;
     ArrayList<Task> taskList = new ArrayList<>();
@@ -18,8 +19,21 @@ public class Dashboard {
 
     public Dashboard() {
         this.name = "default";
-        waitingList.read("Waiting List");
+        scan = new Scanner("WaitingList ToDo InProgress Done");
+        waitingList.read(scan);
+        toDo.read(scan);
+        inProgress.read(scan);
+        done.read(scan);
         getToday();
+    }
+
+    void getToday() {
+        // 현재 날짜 구하기
+        LocalDate now = LocalDate.now();
+        // 포맷 정의
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM.dd");
+        // 포맷 적용
+        Dashboard.today = now.format(formatter);
     }
 
     void run() {
@@ -32,12 +46,12 @@ public class Dashboard {
         scan = new Scanner(System.in);
 
         int menuNum;
-        while (true) {
+        while(true) {
             System.out.format("1. 전체 출력\n");
             System.out.format("2. 검색\n");
             System.out.format("3. 수정\n");
             menuNum = scan.nextInt();
-            if (menuNum == 0)
+            if(menuNum == 0)
                 break;
             switch (menuNum) {
                 case 1 -> print();
@@ -47,36 +61,28 @@ public class Dashboard {
         }
     }
 
-    void getToday() {
-        // 현재 날짜 구하기
-        LocalDate now = LocalDate.now();
-        // 포맷 정의
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM.dd");
-        // 포맷 적용
-        Dashboard.today = now.format(formatter);
-    }
 
     Scanner openfile(String filename) {
-        Scanner scan = null;
+        Scanner filein = null;
         try {
-            scan = new Scanner(new File(filename));
+            filein = new Scanner(new File(filename));
         } catch (Exception e) {
             System.out.printf("파일 오픈 실패: %s\n", filename);
             System.exit(0);
         }
-        return scan;
+        return filein;
     }
 
     void readAllTasks() {
-        scan = openfile("task.txt");
+        fileIn = openfile("task.txt");
         Task t;
-        while (scan.hasNext()) {
+        while (fileIn.hasNext()) {
             t = new Task();
-            t.read(scan);
+            t.read(fileIn);
             classify(t);
             taskList.add(t);
         }
-        scan.close();
+        fileIn.close();
     }
 
     void classify(Task task) {
@@ -111,14 +117,14 @@ public class Dashboard {
         }
         System.out.print("수정할 Task 번호 선택: ");
         int tskNum = scan.nextInt();
-        taskList.get(tskNum - 1).print();
+        taskList.get(tskNum-1).print();
 
         System.out.format("1. 이름 재설정\n");
         System.out.format("2. 날짜 변경\n");
         System.out.format("3. 태그 변경\n");
         System.out.format("4. 내용 변경\n");
         int menuNum = scan.nextInt();
-        taskList.get(tskNum - 1).modify(menuNum, scan);
+        taskList.get(tskNum-1).modify(menuNum, scan);
     }
 
     public static void main(String[] args) {

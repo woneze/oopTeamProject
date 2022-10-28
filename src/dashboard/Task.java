@@ -1,16 +1,19 @@
 package dashboard;
 
+import mgr.Manageable;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Task {
+public class Task implements Manageable {
     String name;
     String start_Date;
     String end_Date;
     ArrayList<String> tag = new ArrayList<>();
     StringBuilder content = new StringBuilder();
 
-    void read(Scanner scan) {
+    @Override
+    public void read(Scanner scan) {
         setName(scan);
         setDate(scan);
         while (setTag(scan)) {
@@ -53,6 +56,7 @@ public class Task {
         }
     }
 
+    @Override
     public void print() {
         System.out.format("||");
         printName();
@@ -115,14 +119,10 @@ public class Task {
         }
     }
 
-    boolean matches(String kwd) {
-        if (this.name.contains(kwd))
-            return true;
-        if (matchesTag(kwd))
-            return true;
-        if (this.content.toString().contains(kwd))
-            return true;
-        return false;
+    @Override
+    public void matches(String kwd) {
+        if (this.name.contains(kwd) || matchesTag(kwd) || this.content.toString().contains(kwd))
+            print();
     }
 
     boolean matchesTag(String kwd) {
