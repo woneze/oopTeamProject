@@ -35,17 +35,16 @@ public class Manager {
     }//ok
 
     public void printAll() {
-        for (int i = 0; i < mList.size(); i++){
-            System.out.format("(%d) ", i+1);
+        for (int i = 0; i < mList.size(); i++) {
+            System.out.format("(%d) ", i + 1);
             mList.get(i).print();
         }
     }
 
-    public Manageable find(String kwd) {
+    public void search(String kwd) {
         for (Manageable m : mList) {
             m.matches(kwd);
         }
-        return null;
     }
 
 }

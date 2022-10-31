@@ -72,7 +72,7 @@ public class Dashboard {
     void search() {
         String kwd = scan.next();
         System.out.println(kwd);
-        scheduleMgr.find(kwd);
+        scheduleMgr.search(kwd);
     }
 
     void modify() {

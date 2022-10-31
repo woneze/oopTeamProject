@@ -6,5 +6,6 @@ public interface Manageable {
     void read(Scanner scan);
 
     void print();
+
     void matches(String kwd);
 }
