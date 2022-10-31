@@ -4,19 +4,16 @@ import mgr.Factory;
 import mgr.Manageable;
 import mgr.Manager;
 
-import java.io.File;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Dashboard {
     public static String today;
-    Scanner fileIn;
     Scanner scan;
     String name;
-    static Manager taskMgr = new Manager();
-    Manager scheduleMgr = new Manager();
+    static Manager<Task> taskMgr = new Manager<>();
+    Manager<Schedule> scheduleMgr = new Manager<>();
 
 
     public Dashboard() {
@@ -34,15 +31,15 @@ public class Dashboard {
     }
 
     void run() {
-        taskMgr.readAll("task.txt", new Factory() {
+        taskMgr.readAll("task.txt", new Factory<Task>() {
             @Override
-            public Manageable create() {
+            public Task create() {
                 return new Task();
             }
         });
-        scheduleMgr.readAll("schedule.txt", new Factory() {
+        scheduleMgr.readAll("schedule.txt", new Factory<Schedule>() {
             @Override
-            public Manageable create() {
+            public Schedule create() {
                 return new Schedule();
             }
         });
@@ -54,12 +51,12 @@ public class Dashboard {
     void menu() {
         scan = new Scanner(System.in);
         int menuNum;
-        while(true) {
+        while (true) {
             System.out.format("1. 전체 출력\n");
             System.out.format("2. 검색\n");
             System.out.format("3. 수정\n");
             menuNum = scan.nextInt();
-            if(menuNum == 0)
+            if (menuNum == 0)
                 break;
             switch (menuNum) {
                 case 1 -> scheduleMgr.printAll();
@@ -79,14 +76,14 @@ public class Dashboard {
         taskMgr.printAll();
         System.out.print("수정할 Task 번호 선택: ");
         int tskNum = scan.nextInt();
-        taskMgr.mList.get(tskNum-1).print();
+        taskMgr.mList.get(tskNum - 1).print();
 
         System.out.format("1. 이름 재설정\n");
         System.out.format("2. 날짜 변경\n");
         System.out.format("3. 태그 변경\n");
         System.out.format("4. 내용 변경\n");
         int menuNum = scan.nextInt();
-        ((Task)(taskMgr.mList.get(tskNum-1))).modify(menuNum, scan);
+        taskMgr.mList.get(tskNum - 1).modify(menuNum, scan);
     }
 
     public static void main(String[] args) {
@@ -95,5 +92,4 @@ public class Dashboard {
         System.out.println(Dashboard.today);
         d.run();
     }
-
 }

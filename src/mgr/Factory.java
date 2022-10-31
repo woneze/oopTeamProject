@@ -1,7 +1,5 @@
 package mgr;
 
-import java.util.Scanner;
-
-public interface Factory {
-    Manageable create();
+public interface Factory<T extends Manageable> {
+    T create();
 }

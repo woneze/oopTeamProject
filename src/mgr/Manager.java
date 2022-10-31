@@ -4,9 +4,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Manager {
+public class Manager<T extends Manageable> {
     public static Scanner fileIn;
-    public ArrayList<Manageable> mList = new ArrayList<>();
+    public ArrayList<T> mList = new ArrayList<>();
 
     protected Scanner openFile(String filename) {
 
@@ -21,11 +21,11 @@ public class Manager {
         return filein;
     }
 
-    public void readAll(String filename, Factory fac) {
+    public void readAll(String filename, Factory<T> fac) {
 
         fileIn = openFile(filename);
 
-        Manageable b = null;
+        T b = null;
         while (fileIn.hasNext()) {
             b = fac.create();
             b.read(fileIn);
@@ -42,9 +42,8 @@ public class Manager {
     }
 
     public void search(String kwd) {
-        for (Manageable m : mList) {
+        for (T m : mList) {
             m.matches(kwd);
         }
     }
-
 }
