@@ -32,11 +32,11 @@ public class Manager<T extends Manageable> {
             mList.add(b);
         }
         fileIn.close();
-    }//ok
+    }
 
     public void printAll() {
         for (int i = 0; i < mList.size(); i++) {
-            System.out.format("(%d) ", i + 1);
+            System.out.format("\n(%d) ", i + 1);
             mList.get(i).print();
         }
     }

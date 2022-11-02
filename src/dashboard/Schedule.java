@@ -1,7 +1,7 @@
 package dashboard;
 
 import mgr.Manageable;
-import java.util.ArrayList;
+
 import java.util.HashSet;
 import java.util.Scanner;
 
@@ -18,11 +18,15 @@ public class Schedule implements Manageable {
         classify();
     }
 
-    void classify(){
+    void classify() {
         for (Task t : Dashboard.taskMgr.mList) {
             if (schCateNum == t.progressLvl())
                 taskList.add(t);
             else
+                taskList.remove(t);
+        }
+        for (Task t : taskList) {
+            if (!Dashboard.taskMgr.mList.contains(t))
                 taskList.remove(t);
         }
     }
@@ -34,7 +38,7 @@ public class Schedule implements Manageable {
         for (Task t : taskList) {
             t.print();
         }
-        System.out.println("-".repeat(80) + "\n");
+        System.out.println("-".repeat(80));
     }
 
     @Override

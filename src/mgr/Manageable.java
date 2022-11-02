@@ -8,4 +8,5 @@ public interface Manageable {
     void print();
 
     void matches(String kwd);
+
 }

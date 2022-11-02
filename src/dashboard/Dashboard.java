@@ -1,7 +1,6 @@
 package dashboard;
 
 import mgr.Factory;
-import mgr.Manageable;
 import mgr.Manager;
 
 import java.time.LocalDate;
@@ -46,10 +45,10 @@ public class Dashboard {
         scan = new Scanner(System.in);
         int menuNum;
         while (true) {
-            System.out.format("\t0. 종료\n");
+            System.out.format("\n\t0. 종료\n");
             System.out.format("\t1. 전체 출력\n");
-            System.out.format("\t2. 검색\n");
-            System.out.format("\t3. 수정\n");
+            System.out.format("\t2. 일정 검색\n");
+            System.out.format("\t3. 일정 수정\n");
             System.out.format("\t4. 일정 추가\n");
             System.out.format("\t5. 일정 삭제\n");
             menuNum = scan.nextInt();
@@ -60,17 +59,19 @@ public class Dashboard {
                 case 2 -> search();
                 case 3 -> modify();
                 case 4 -> {
+                    scan.nextLine();
                     Task t = new Task();
                     t.read(scan);
                     taskMgr.mList.add(t);
+                    classify();
                 }
                 case 5 -> {
                     taskMgr.printAll();
                     System.out.print("\n삭제할 Task 번호 선택: ");
                     int tskNum = scan.nextInt();
-                    taskMgr.mList.get(tskNum - 1).print();
-                    System.out.println("삭제되었습니다.");
                     taskMgr.mList.remove(tskNum - 1);
+                    System.out.println("삭제되었습니다.");
+                    classify();
                 }
             }
         }
@@ -89,19 +90,22 @@ public class Dashboard {
         int tskNum = scan.nextInt();
         taskMgr.mList.get(tskNum - 1).print();
 
-        System.out.format("\n\t1. 이름 재설정\n");
+        System.out.format("\n\t0. 수정 종료\n");
+        System.out.format("\t1. 이름 재설정\n");
         System.out.format("\t2. 날짜 변경\n");
         System.out.format("\t3. 태그 변경\n");
         System.out.format("\t4. 내용 변경\n");
-
         taskMgr.mList.get(tskNum - 1).modify(scan.nextInt(), scan);
-        for(Schedule s:Dashboard.scheduleMgr.mList){
+        classify();
+    }
+
+    void classify() {
+        for (Schedule s : Dashboard.scheduleMgr.mList) {
             s.classify();
-        }
+        }//설계원칙에 따라 리팩토링 필요
     }
 
     public static void main(String[] args) {
-
         Dashboard d = new Dashboard();
         d.run();
     }

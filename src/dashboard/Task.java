@@ -1,9 +1,5 @@
 package dashboard;
 
-import mgr.Manageable;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Scanner;
 
@@ -11,7 +7,6 @@ public class Task extends Daily {
     String start_Date;
     String end_Date;
     HashSet<String> tag = new HashSet<>();
-    int tagCount = 0;
 
     @Override
     public void read(Scanner scan) {
@@ -21,20 +16,26 @@ public class Task extends Daily {
         while (setTag(scan)) {
         }
         scan.nextLine();
-        scan.nextLine();
     }
 
     private void setDate(Scanner scan) {
+        System.out.format("시작 날짜 입력: ");
         this.start_Date = scan.next();
+        System.out.print("\b".repeat("시작 날짜 입력: ".length()));
         if (start_Date.equals("-"))
             this.end_Date = "-";
-        else
+        else {
+            System.out.format("마감 날짜 입력: ");
             this.end_Date = scan.next();
+            System.out.print("\b".repeat("마감 날짜 입력: ".length()));
+        }
+
     }
 
     private boolean setTag(Scanner scan) {// #tag는 태그 추가 -tag는 태그 삭제
+        System.out.format("\'#태그\'를 입력하세요: ");
         String hashtag = scan.next();
-
+        System.out.print("\b".repeat("\'#태그\'를 입력하세요: ".length()));
         return switch (hashtag.charAt(0)) {
             case '#' -> {
                 if (tag.size() > 5) {
@@ -45,7 +46,6 @@ public class Task extends Daily {
                 yield true;
             }
             case '-' -> {
-                System.out.format("%s 삭제", "#" + hashtag.substring(1));
                 tag.remove("#" + hashtag.substring(1));
                 yield false;
             }
@@ -81,10 +81,12 @@ public class Task extends Daily {
     }
 
     public int progressLvl() {
+        if (start_Date == null)
+            return -1;
         if (start_Date.equals("-"))
             return 1;// waitingList
         if (start_Date.compareTo(Dashboard.today) > 0)
-            return 2;//toDo
+            return 2;//todo
         else {
             if (end_Date.compareTo(Dashboard.today) >= 0)
                 return 3;// inProgress
@@ -97,6 +99,7 @@ public class Task extends Daily {
     public void modify(int menuChk, Scanner scan) {
         scan.nextLine();
         switch (menuChk) {
+            case 0 -> System.out.println("종료");
             case 1 -> {
                 System.out.print("이름 입력: ");
                 setName(scan);

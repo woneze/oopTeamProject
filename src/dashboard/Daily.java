@@ -2,7 +2,6 @@ package dashboard;
 
 import mgr.Manageable;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 
 class Daily implements Manageable {
@@ -16,10 +15,15 @@ class Daily implements Manageable {
     }
 
     protected void setName(Scanner scan) {
+        System.out.format("일정 이름을 입력하세요.");
         this.name = scan.nextLine();
+        System.out.print("\b".repeat("일정 이름을 입력하세요.".length()));
     }
+
     protected void setContent(Scanner scan) {
+        System.out.format("일정 내용을 입력하세요.");
         String rewrite = scan.nextLine();
+        System.out.print("\b".repeat("일정 내용을 입력하세요.".length()));
         if (rewrite.equals("다시쓰기")) {
             this.content.delete(0, content.length());
             this.content.append(scan.next());
@@ -31,17 +35,17 @@ class Daily implements Manageable {
     @Override
     public void print() {
         System.out.format("|*");
-        printName();System.out.format("| ");
-        printContent();System.out.format("| ");
+        printName();
+        System.out.format("| ");
+        printContent();
+        System.out.format("| ");
         System.out.println();
     }
 
     protected void printName() {
-        if (name.length() > 10) {
-            System.out.format("[%s...] ", name.substring(0, 8));
-        } else
-            System.out.format("[%s] ", name);
+        System.out.format("[%s] ", name);
     }
+
     protected void printContent() {
         if (content.length() > 15) {
             System.out.format("%-12s... ", content.substring(0, 13));
