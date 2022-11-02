@@ -2,11 +2,12 @@ package dashboard;
 
 import mgr.Manageable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Scanner;
 
 public class Schedule implements Manageable {
     String name;
-    ArrayList<Task> taskList = new ArrayList<>();
+    HashSet<Task> taskList = new HashSet<>();
     int schCateNum;//1, 2, 3, 4 중에서만 받아야 함. 1:wtList, 2:to do, 3:inpro, 4:done
 
     @Override
@@ -14,9 +15,15 @@ public class Schedule implements Manageable {
         this.name = scan.nextLine();
         this.schCateNum = scan.nextInt();
         scan.nextLine();
+        classify();
+    }
+
+    void classify(){
         for (Task t : Dashboard.taskMgr.mList) {
             if (schCateNum == t.progressLvl())
                 taskList.add(t);
+            else
+                taskList.remove(t);
         }
     }
 
@@ -38,5 +45,6 @@ public class Schedule implements Manageable {
             t.matches(kwd);
         }
         System.out.println("-".repeat(80));
+        System.out.println();
     }
 }

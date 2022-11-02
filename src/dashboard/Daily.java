@@ -30,17 +30,17 @@ class Daily implements Manageable {
 
     @Override
     public void print() {
-        System.out.format("||");
-        printName();
-        printContent();
+        System.out.format("|*");
+        printName();System.out.format("| ");
+        printContent();System.out.format("| ");
         System.out.println();
     }
 
     protected void printName() {
         if (name.length() > 10) {
-            System.out.format("*[%s...] | ", name.substring(0, 8));
+            System.out.format("[%s...] ", name.substring(0, 8));
         } else
-            System.out.format("*[%s] | ", name);
+            System.out.format("[%s] ", name);
     }
     protected void printContent() {
         if (content.length() > 15) {
